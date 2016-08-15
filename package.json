@@ -9,7 +9,7 @@
     "lint": "eslint *.js test/ libs/",
     "test": "mocha --compilers js:babel-register",
     "clean": "rm -r build/ tmp/",
-    "build": "npm run test && npm run coverage && npm run compile",
+    "build": "npm run lint && npm run test && npm run coverage && npm run compile",
     "compile": "babel ./libs -d dist",
     "coverage": "./node_modules/.bin/istanbul cover _mocha -x dist/*.js -- --compilers js:babel-register"
   },

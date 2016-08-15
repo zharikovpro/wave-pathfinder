@@ -1,7 +1,7 @@
 import chai from 'chai';
 
 const { assert } = chai;
-const WavePathFinder = require('../');
+const WavePathFinder = require('../libs/wave_path_finder');
 
 chai.should();
 
