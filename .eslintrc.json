@@ -2,13 +2,7 @@
   "extends": "airbnb",
 
   "env": {
-    "mocha": true,
-    "browser": true,
-    "jquery": true
-  },
-
-  "globals": {
-    "NODE_ENV": true
+    "mocha": true
   },
 
   "parserOptions": {

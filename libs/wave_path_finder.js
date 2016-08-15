@@ -6,7 +6,7 @@
  *
  */
 
-module.exports = class {
+class WavePathFinder {
   /**
    * Static wrapper for findPath
    *
@@ -167,3 +167,5 @@ module.exports = class {
     }
   }
 }
+
+module.exports = WavePathFinder;

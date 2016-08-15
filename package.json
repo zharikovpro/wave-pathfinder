@@ -6,12 +6,11 @@
   "author": "Andrey Zharikov & Nikolay Govorov",
   "description": "The algorithm seeks the shortest path in the matrix.",
   "scripts": {
-    "start": "karma start karma.conf.js",
-    "build": "npm run test && NODE_ENV=production webpack",
-    "deploy": "npm run test && NODE_ENV=deploy webpack",
     "lint": "eslint *.js test/",
     "clean": "rm -r build/ tmp/",
-    "test": "npm run clean && karma start karma.conf.js --single-run"
+    "test": "mocha --compilers js:babel-register",
+    "build": "npm run test && NODE_ENV=production webpack",
+    "coverage": "./node_modules/.bin/istanbul cover _mocha -- --compilers js:babel-register"
   },
   "repository": {
     "type": "git",
@@ -24,8 +23,7 @@
   "files": [
     "LICENSE",
     "README.md",
-    "dist/wave_finder.js",
-    "dist/wave_finder.js.map"
+    "index.js"
   ],
   "dependencies": {
     "chai": "^3.5.0"
@@ -42,16 +40,7 @@
     "eslint-plugin-import": "^1.13.0",
     "eslint-plugin-jsx-a11y": "^2.1.0",
     "eslint-plugin-react": "^6.1.0",
-    "karma": "^1.2.0",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^1.0.1",
-    "karma-coverage": "^1.1.1",
-    "karma-eslint": "^2.1.0",
-    "karma-mocha": "^1.1.1",
-    "karma-mocha-reporter": "^2.1.0",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^1.8.0",
-    "mocha": "^3.0.2",
-    "webpack": "^1.13.1"
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^3.0.2"
   }
 }
