@@ -6,11 +6,12 @@
   "author": "Andrey Zharikov & Nikolay Govorov",
   "description": "The algorithm seeks the shortest path in the matrix.",
   "scripts": {
-    "lint": "eslint *.js test/",
-    "clean": "rm -r build/ tmp/",
+    "lint": "eslint *.js test/ libs/",
     "test": "mocha --compilers js:babel-register",
-    "build": "npm run test && NODE_ENV=production webpack",
-    "coverage": "./node_modules/.bin/istanbul cover _mocha -- --compilers js:babel-register"
+    "clean": "rm -r build/ tmp/",
+    "build": "npm run test && npm run coverage && npm run compile",
+    "compile": "babel ./libs -d dist",
+    "coverage": "./node_modules/.bin/istanbul cover _mocha -x dist/*.js -- --compilers js:babel-register"
   },
   "repository": {
     "type": "git",
