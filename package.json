@@ -6,11 +6,10 @@
   "author": "Andrey Zharikov & Nikolay Govorov",
   "description": "Wave pathfinding (The Lee algorithm)",
   "scripts": {
-    "lint": "eslint *.js test/ libs/",
+    "lint": "eslint *.js test/ src/",
     "test": "mocha --compilers js:babel-register",
-    "compile": "rm -rf dist/* && babel ./libs -d dist",
     "coverage": "rm -rf coverage/* && ./node_modules/.bin/istanbul cover _mocha -x dist/*.js -- --compilers js:babel-register",
-    "deploy": "npm run lint && npm run coverage && npm run compile"
+    "prepublish": "rm -rf dist/* && babel ./src -d dist"
   },
   "repository": {
     "type": "git",
