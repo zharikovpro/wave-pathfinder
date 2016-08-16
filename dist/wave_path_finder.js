@@ -186,9 +186,11 @@ var WavePathFinder = function () {
 
       for (var step = this.stepsMatrix[finishX][finishY]; step >= 0; step--) {
         if (propagateWave(currentX + 1, currentY, step) || propagateWave(currentX - 1, currentY, step) || propagateWave(currentX, currentY + 1, step) || propagateWave(currentX, currentY - 1, step)) {
-          return this.resultPath.reverse();
+          break;
         }
       }
+
+      return this.resultPath.reverse();
     }
   }]);
 

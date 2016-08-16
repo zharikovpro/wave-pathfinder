@@ -155,8 +155,6 @@ class WavePathFinder {
       return false;
     };
 
-    let result;
-
     for (let step = this.stepsMatrix[finishX][finishY]; step >= 0; step--) {
       if (
         propagateWave(currentX + 1, currentY, step) ||
@@ -164,11 +162,11 @@ class WavePathFinder {
         propagateWave(currentX, currentY + 1, step) ||
         propagateWave(currentX, currentY - 1, step)
       ) {
-        result = this.resultPath.reverse();
+        break;
       }
     }
 
-    return result;
+    return this.resultPath.reverse();
   }
 }
 
