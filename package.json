@@ -1,8 +1,8 @@
 {
   "license": "MIT",
   "version": "0.1.0",
-  "name": "wave-path-finder",
-  "main": "dist/wave_path_finder.js",
+  "name": "wave-pathfinder",
+  "main": "dist/wave_pathfinder.js",
   "author": "Andrey Zharikov & Nikolay Govorov",
   "description": "Wave pathfinding (The Lee algorithm)",
   "scripts": {
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zharikovpro/wavefinder.git"
+    "url": "git+https://github.com/zharikovpro/wave-pathfinder.git"
   },
   "bugs": {
-    "url": "https://github.com/zharikovpro/wavefinder/issues"
+    "url": "https://github.com/zharikovpro/wave-pathfinder/issues"
   },
-  "homepage": "https://github.com/zharikovpro/wavefinder#readme",
+  "homepage": "https://github.com/zharikovpro/wave-pathfinder#readme",
   "files": [
     "LICENSE",
     "README.md",

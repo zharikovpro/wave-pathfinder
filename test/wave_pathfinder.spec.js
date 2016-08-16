@@ -1,7 +1,7 @@
 import chai from 'chai';
 
 const { assert } = chai;
-const WavePathFinder = require('../src/wave_path_finder');
+const WavePathfinder = require('../src/wave_pathfinder');
 
 chai.should();
 
@@ -47,11 +47,11 @@ const mapOptions = (drawing) => {
   };
 };
 
-describe('WavePathFinder', () => {
+describe('WavePathfinder', () => {
   describe('constructor', () => {
     it('uncorrected matrix - string', () => {
       (() => {
-        const temp = new WavePathFinder('bla-bla-bla');
+        const temp = new WavePathfinder('bla-bla-bla');
         return temp;
       }).should.throw(Error);
     });
@@ -62,7 +62,7 @@ describe('WavePathFinder', () => {
                                      | | |x| | |
                                      | | |x|B| |`);
 
-      const path = new WavePathFinder(matrix);
+      const path = new WavePathfinder(matrix);
 
       assert.deepEqual(path.passabilityMatrix, [[1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1],
@@ -96,10 +96,10 @@ describe('WavePathFinder', () => {
       it(test.name, () => {
         const { matrix, resultPath, startX, startY, finishX, finishY } = mapOptions(test.map);
 
-        const path = WavePathFinder.findPath(matrix, startX, startY, finishX, finishY);
+        const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
 
         assert.deepEqual(path, resultPath);
       });
     }); // forEach
   }); // describe - findPath
-}); // describe - WavePathFinder
+}); // describe - WavePathfinder
