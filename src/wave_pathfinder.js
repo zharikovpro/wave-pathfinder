@@ -8,7 +8,7 @@
 
 class WavePathfinder {
   /**
-   * Static wrapper for findPath
+   * Shorthand method for findPath
    *
    * @param {array} passabilityMatrix
    * @param {number} startX
@@ -16,7 +16,8 @@ class WavePathfinder {
    * @param {number} finishX
    * @param {number} finishY
    *
-   * @return {array} path
+   * @return {null|object[]} Path from start to finish or null if not found.
+   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
   static findPath(passabilityMatrix, startX, startY, finishX, finishY) {
@@ -26,42 +27,39 @@ class WavePathfinder {
   }
 
   /**
-   * Constructor requires passability matrix
+   * Instantiate object based on passability matrix
    *
-   * @param {array} passabilityMatrix - two-dimensional boolean array
-   *                true: passable cell, false: non-passable
-   *                other truthy and falsy values can be used as well:
-   *                Example: [ 1, 1, 1 ]
-   *                         [ 0, 0, 1 ]
-   *                         [ 1, 0, 1 ]
+   * @param {array} passabilityMatrix - two-dimensional boolean array (x, y)
+   *                where true is passable cell and false is non-passable.
+   *                other truthy and falsy values can be used as well.
+   *                Example: [ [1, 1, 1], [0, 0, 1], [1, 0, 1] ]
    *
-   * @return {undefined}
+   * @return {object} WavePathfinder object
    */
 
   constructor(passabilityMatrix) {
-    if (typeof passabilityMatrix !== 'object') {
+    if (!Array.isArray(passabilityMatrix)) {
       throw new Error('Incorrect matrix!');
-    } else {
-      this.passabilityMatrix = passabilityMatrix.map(row => row.slice());
     }
 
     this.START_CELL = 0;
     this.UNVISITED_CELL = -1;
+
+    this.passabilityMatrix = passabilityMatrix.map(row => row.slice());
+
+    return this;
   }
 
   /**
-   * The function is a wrapper over functions propagateWave and restorePath.
+   * Shorthand that combines propagateWave + restorePath.
    *
    * @param {number} startX
    * @param {number} startY
    * @param {number} finishX
    * @param {number} finishY
    *
-   * @return {array} If there is a way the function will return an array of objects with
-   *                 two fields (x and y), including the start and end points.
-   *                 Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }, { x: 0, y: 3 },
-   *                            { x: 0, y: 4 }, { x: 1, y: 4 }, { x: 2, y: 4 }, { x: 3, y: 4 } ]
-   *                 If there is no way it will return null.
+   * @return {null|array} Shortest path from start to finish or null if not found.
+   *                 Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
   findPath(startX, startY, finishX, finishY) {
@@ -71,18 +69,21 @@ class WavePathfinder {
   }
 
   /**
-   * The function will propagate the wave. This is the second stage of the wave algorithm.
+   * Propagate wave and calculate steps number for each reachable cell.
+   * This method must be called at least once to find shortest paths from start to other cells.
+   * Once it has been called, restorePath can be called multiple times for different finish cells.
    *
    * @param {number} startX
    * @param {number} startY
    *
-   * @return {array} Wave array with minimum possible steps number for each reachable cell
+   * @return {array} Steps array with minimum possible steps number for each cell.
+   *                 0 means start (current) cell, -1 means unreachable cell.
    */
 
   propagateWave(startX, startY) {
     this.resultPath = [];
 
-    // first part of the wave algorithm - matrix initialization
+    // first part of the wave algorithm - work field matrix initialization
     this.stepsMatrix = this.passabilityMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
     this.stepsMatrix[startX][startY] = this.START_CELL;
 
@@ -112,21 +113,21 @@ class WavePathfinder {
   }
 
   /**
-   * This method will restore the path on the basis of waves from a point which came to zero.
-   * Execute this method after method propagateWave. This is the third step of the wave algorithm.
+   * Finds shortest path from start to finish based on steps matrix.
+   * Call this method after propagateWave.
    *
    * @param {number} finishX
    * @param {number} finishY
    *
-   * @return {array} If path was found, function will return path
-   *                 as an array of objects with cell coordinates,
-   *                 including the start and end points.
-   *                 Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }, { x: 0, y: 3 },
-   *                            { x: 0, y: 4 }, { x: 1, y: 4 }, { x: 2, y: 4 }, { x: 3, y: 4 } ]
-   *                 Returns null if there is no path.
+   * @return {null|array} Path from start to finish or null if not found.
+   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
   restorePath(finishX, finishY) {
+    if (typeof this.stepsMatrix === 'undefined') {
+      throw new Error('Call propagateWave first to calculate stepsMatrix!');
+    }
+
     if (this.stepsMatrix[finishX][finishY] === this.UNVISITED_CELL) {
       this.resultPath = null;
       return null;

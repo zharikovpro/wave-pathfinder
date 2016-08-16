@@ -1,4 +1,4 @@
-import chai from 'chai';
+import chai from 'chai'; // eslint-disable-line import/no-extraneous-dependencies
 
 const { assert } = chai;
 const WavePathfinder = require('../src/wave_pathfinder');
@@ -50,22 +50,21 @@ const mapOptions = (drawing) => {
 
 describe('WavePathfinder', () => {
   describe('constructor', () => {
-    it('uncorrected matrix - string', () => {
+    it('throws exception when passabilityMatrix argument is not an array', () => {
       (() => {
-        const temp = new WavePathfinder('bla-bla-bla');
-        return temp;
+        new WavePathfinder('bla-bla-bla');
       }).should.throw(Error);
     });
 
-    it('when an correct matrix', () => {
+    it('makes a copy of passed passabilityMatrix argument', () => {
       const { matrix } = mapOptions(`|A| |x| | |
                                      | | |x| | |
                                      | | |x| | |
                                      | | |x|B| |`);
 
-      const path = new WavePathfinder(matrix);
+      const finder = new WavePathfinder(matrix);
 
-      assert.deepEqual(path.passabilityMatrix, [[1, 1, 0, 1, 1],
+      assert.deepEqual(finder.passabilityMatrix, [[1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1]]);
@@ -74,19 +73,19 @@ describe('WavePathfinder', () => {
 
   describe('findPath', () => {
     const tests = [{
-      name: 'returns null where is no path',
+      name: 'returns null when there is no path',
       map: `|A| |x| | |
             | | |x| | |
             | | |x| | |
             | | |x|B| |`,
     }, {
-      name: 'from left to right',
+      name: 'returns path from left to right',
       map: `|A|1|2|3|4|
             |x|x|x|x|5|
             |x| | |x|6|
             | | | |x|B|`,
     }, {
-      name: 'from right to left',
+      name: 'returns path from right to left',
       map: `|B|6|x| | |
             |x|5|4|x| |
             | |x|3|2|x|
@@ -103,4 +102,13 @@ describe('WavePathfinder', () => {
       });
     }); // forEach
   }); // describe - findPath
+
+  describe('restorePath', () => {
+    it('throws exception if propagateWave was not called before', () => {
+      (() => {
+        const finder = new WavePathfinder([ [0, 1], [1, 0] ]);
+        finder.restorePath(1, 1);
+      }).should.throw(Error);
+    });
+  });
 }); // describe - WavePathfinder
