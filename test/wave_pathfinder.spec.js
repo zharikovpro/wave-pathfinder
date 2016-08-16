@@ -5,6 +5,7 @@ const WavePathfinder = require('../src/wave_pathfinder');
 
 chai.should();
 
+// helper function to generate test cases from ASCII maps
 const mapOptions = (drawing) => {
   let start = {};
   let finish = {};
