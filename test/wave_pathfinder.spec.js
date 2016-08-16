@@ -103,11 +103,11 @@ describe('WavePathfinder', () => {
     }); // forEach
   }); // describe - findPath
 
-  describe('restorePath', () => {
-    it('throws exception if propagateWave was not called before', () => {
+  describe('backtracePath', () => {
+    it('throws exception if expandWave was not called before', () => {
       (() => {
         const finder = new WavePathfinder([ [0, 1], [1, 0] ]);
-        finder.restorePath(1, 1);
+        finder.backtracePath(1, 1);
       }).should.throw(Error);
     });
   });

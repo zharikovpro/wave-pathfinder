@@ -51,7 +51,7 @@ class WavePathfinder {
   }
 
   /**
-   * Shorthand that combines propagateWave + restorePath.
+   * Shorthand that combines expandWave + backtracePath.
    *
    * @param {number} startX
    * @param {number} startY
@@ -63,15 +63,15 @@ class WavePathfinder {
    */
 
   findPath(startX, startY, finishX, finishY) {
-    this.propagateWave(startX, startY);
+    this.expandWave(startX, startY);
 
-    return this.restorePath(finishX, finishY);
+    return this.backtracePath(finishX, finishY);
   }
 
   /**
-   * Propagate wave and calculate steps number for each reachable cell.
+   * Expand wave and calculate steps number for each reachable cell.
    * This method must be called at least once to find shortest paths from start to other cells.
-   * Once it has been called, restorePath can be called multiple times for different finish cells.
+   * Once it has been called, backtracePath can be called multiple times for different finish cells.
    *
    * @param {number} startX
    * @param {number} startY
@@ -80,7 +80,7 @@ class WavePathfinder {
    *                 0 means start (current) cell, -1 means unreachable cell.
    */
 
-  propagateWave(startX, startY) {
+  expandWave(startX, startY) {
     this.resultPath = [];
 
     // first part of the wave algorithm - work field matrix initialization
@@ -114,7 +114,7 @@ class WavePathfinder {
 
   /**
    * Finds shortest path from start to finish based on steps matrix.
-   * Call this method after propagateWave.
+   * Call this method after expandWave.
    *
    * @param {number} finishX
    * @param {number} finishY
@@ -123,9 +123,9 @@ class WavePathfinder {
    *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  restorePath(finishX, finishY) {
+  backtracePath(finishX, finishY) {
     if (typeof this.stepsMatrix === 'undefined') {
-      throw new Error('Call propagateWave first to calculate stepsMatrix!');
+      throw new Error('Call expandWave first to calculate stepsMatrix!');
     }
 
     if (this.stepsMatrix[finishX][finishY] === this.UNVISITED_CELL) {
