@@ -3,7 +3,7 @@ Wave Pathfinder
 
 Pathfinding for 2-dimensional matrix (x, y) using [Lee algorithm](https://en.wikipedia.org/wiki/Lee_algorithm), also known as wave pathfinding.  
 
-[![Code Climate](https://codeclimate.com/github/zharikovpro/wave-pathfinder/badges/gpa.svg)](https://codeclimate.com/github/zharikovpro/wave-pathfinder)
+[![Code Climate](https://codeclimate.com/github/zharikovpro/wave-pathfinder/badges/gpa.svg)](https://codeclimate.com/github/zharikovpro/wave-pathfinder) [![Test Coverage](https://codeclimate.com/github/zharikovpro/wave-pathfinder/badges/coverage.svg)](https://codeclimate.com/github/zharikovpro/wave-pathfinder/coverage)
 
 Advantages of wave algorithm:
 -----------------------------
