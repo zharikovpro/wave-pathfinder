@@ -53,20 +53,20 @@ class WavePathfinder {
   /**
    * Shorthand that combines expandWave + backtracePath.
    *
-   * @param {number} startX
-   * @param {number} startY
-   * @param {number} finishX
-   * @param {number} finishY
+   * @param {number} startRow
+   * @param {number} startCol
+   * @param {number} finishRow
+   * @param {number} finishCol
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
    *                      Array of { row, col } steps.
    *                      Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
    */
 
-  findPath(startX, startY, finishX, finishY) {
-    this.expandWave(startX, startY);
+  findPath(startRow, startCol, finishRow, finishCol) {
+    this.expandWave(startRow, startCol);
 
-    return this.backtracePath(finishX, finishY);
+    return this.backtracePath(finishRow, finishCol);
   }
 
   /**
@@ -74,25 +74,25 @@ class WavePathfinder {
    * This method must be called at least once to find shortest paths from start to other cells.
    * Once it has been called, backtracePath can be called multiple times for different finish cells.
    *
-   * @param {number} startX
-   * @param {number} startY
+   * @param {number} startRow
+   * @param {number} startCol
    *
    * @return {array} Steps array with minimum possible steps number for each cell.
    *                 0 means start (current) cell, -1 means unreachable cell.
    */
 
-  expandWave(startX, startY) {
+  expandWave(startRow, startCol) {
     this.resultPath = [];
 
     // first part of the wave algorithm - work field matrix initialization
     this.stepsMatrix = this.passabilityMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
-    this.stepsMatrix[startX][startY] = this.START_CELL;
+    this.stepsMatrix[startRow][startCol] = this.START_CELL;
 
     // second part of the wave algorithm - wave propagation
-    const propagateWave = (newX, newY, step) => {
-      if (this.passabilityMatrix[newX] && this.passabilityMatrix[newX][newY]) {
-        if (this.stepsMatrix[newX][newY] === this.UNVISITED_CELL) {
-          this.stepsMatrix[newX][newY] = step + 1;
+    const propagateWave = (newRow, newCol, step) => {
+      if (this.passabilityMatrix[newRow] && this.passabilityMatrix[newRow][newCol]) {
+        if (this.stepsMatrix[newRow][newCol] === this.UNVISITED_CELL) {
+          this.stepsMatrix[newRow][newCol] = step + 1;
         }
       }
     };
