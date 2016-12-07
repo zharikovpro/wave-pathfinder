@@ -40,10 +40,10 @@ const mapOptions = (drawing) => {
 
   return {
     matrix,
-    startX: start.x,
-    startY: start.y,
-    finishX: finish.x,
-    finishY: finish.y,
+    startRow: start.x,
+    startCol: start.y,
+    finishRow: finish.x,
+    finishCol: finish.y,
     resultPath: steps,
   };
 };
@@ -94,9 +94,9 @@ describe('WavePathfinder', () => {
 
     tests.forEach((test) => {
       it(test.name, () => {
-        const { matrix, resultPath, startX, startY, finishX, finishY } = mapOptions(test.map);
+        const { matrix, resultPath, startRow, startCol, finishRow, finishCol } = mapOptions(test.map);
 
-        const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
+        const path = WavePathfinder.findPath(matrix, startRow, startCol, finishRow, finishCol);
 
         assert.deepEqual(path, resultPath);
       });
