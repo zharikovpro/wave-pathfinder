@@ -35,15 +35,15 @@ const mapOptions = (drawing) => {
   } else {
     steps.push({ x: start.x, y: start.y, step: 0 });
     steps.push({ x: finish.x, y: finish.y, step: steps.length });
-    steps = steps.sort((a, b) => a.step - b.step).map(step => ({ x: step.x, y: step.y }));
+    steps = steps.sort((a, b) => a.step - b.step).map(step => ([ step.x, step.y ]));
   }
 
   return {
     matrix,
-    startX: start.x,
-    startY: start.y,
-    finishX: finish.x,
-    finishY: finish.y,
+    startRow: start.x,
+    startCol: start.y,
+    finishRow: finish.x,
+    finishCol: finish.y,
     resultPath: steps,
   };
 };
@@ -94,9 +94,9 @@ describe('WavePathfinder', () => {
 
     tests.forEach((test) => {
       it(test.name, () => {
-        const { matrix, resultPath, startX, startY, finishX, finishY } = mapOptions(test.map);
+        const { matrix, resultPath, startRow, startCol, finishRow, finishCol } = mapOptions(test.map);
 
-        const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
+        const path = WavePathfinder.findPath(matrix, startRow, startCol, finishRow, finishCol);
 
         assert.deepEqual(path, resultPath);
       });
