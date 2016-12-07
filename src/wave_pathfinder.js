@@ -97,13 +97,13 @@ class WavePathfinder {
     };
 
     for (let step = 0; step < this.stepsMatrix.length * this.stepsMatrix[0].length; step++) {
-      for (let x = 0; x < this.stepsMatrix.length; x++) {
-        for (let y = 0; y < this.stepsMatrix[0].length; y++) {
-          if (this.stepsMatrix[x][y] === step) {
-            propagateWave(x, y + 1, step); // up
-            propagateWave(x + 1, y, step); // right
-            propagateWave(x, y - 1, step); // down
-            propagateWave(x - 1, y, step); // left
+      for (let row = 0; row < this.stepsMatrix.length; row++) {
+        for (let col = 0; col < this.stepsMatrix[0].length; col++) {
+          if (this.stepsMatrix[row][col] === step) {
+            propagateWave(row, col + 1, step); // up
+            propagateWave(row + 1, col, step); // right
+            propagateWave(row, col - 1, step); // down
+            propagateWave(row - 1, col, step); // left
           }
         }
       }
@@ -116,52 +116,52 @@ class WavePathfinder {
    * Finds shortest path from start to finish based on steps matrix.
    * Call this method after expandWave.
    *
-   * @param {number} finishX
-   * @param {number} finishY
+   * @param {number} finishRow
+   * @param {number} finishCol
    *
    * @return {null|array} Path from start to finish or null if not found.
    *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  backtracePath(finishX, finishY) {
+  backtracePath(finishRow, finishCol) {
     if (typeof this.stepsMatrix === 'undefined') {
       throw new Error('Call expandWave first to calculate stepsMatrix!');
     }
 
-    if (this.stepsMatrix[finishX][finishY] === this.UNVISITED_CELL) {
+    if (this.stepsMatrix[finishRow][finishCol] === this.UNVISITED_CELL) {
       this.resultPath = null;
       return null;
     }
 
     this.resultPath = [];
 
-    let currentX = finishX;
-    let currentY = finishY;
+    let currentRow = finishRow;
+    let currentCol = finishCol;
 
     const addStep = (x, y) => {
       this.resultPath.push({ x, y });
     };
 
-    addStep(finishX, finishY);
+    addStep(finishRow, finishCol);
 
-    const propagateWave = (newX, newY, step) => {
-      if (this.stepsMatrix[newX] !== undefined) {
-        if (this.stepsMatrix[newX][newY] === step - 1) {
-          addStep(newX, newY);
-          currentX = newX;
-          currentY = newY;
+    const propagateWave = (newRow, newCol, step) => {
+      if (this.stepsMatrix[newRow] !== undefined) {
+        if (this.stepsMatrix[newRow][newCol] === step - 1) {
+          addStep(newRow, newCol);
+          currentRow = newRow;
+          currentCol = newCol;
           if (step === 1) return true;
         }
       }
       return false;
     };
 
-    for (let step = this.stepsMatrix[finishX][finishY]; step >= 0; step--) {
+    for (let step = this.stepsMatrix[finishRow][finishCol]; step >= 0; step--) {
       if (
-        propagateWave(currentX + 1, currentY, step) ||
-        propagateWave(currentX - 1, currentY, step) ||
-        propagateWave(currentX, currentY + 1, step) ||
-        propagateWave(currentX, currentY - 1, step)
+        propagateWave(currentRow + 1, currentCol, step) ||
+        propagateWave(currentRow - 1, currentCol, step) ||
+        propagateWave(currentRow, currentCol + 1, step) ||
+        propagateWave(currentRow, currentCol - 1, step)
       ) {
         break;
       }
