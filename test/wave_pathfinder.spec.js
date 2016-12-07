@@ -50,13 +50,13 @@ const mapOptions = (drawing) => {
 
 describe('WavePathfinder', () => {
   describe('constructor', () => {
-    it('throws exception when passabilityMatrix argument is not an array', () => {
+    it('throws exception when obstaclesMatrix argument is not an array', () => {
       (() => {
         new WavePathfinder('bla-bla-bla');
       }).should.throw(Error);
     });
 
-    it('makes a copy of passed passabilityMatrix argument', () => {
+    it('makes a copy of passed obstaclesMatrix argument', () => {
       const { matrix } = mapOptions(`|A| |x| | |
                                      | | |x| | |
                                      | | |x| | |
@@ -64,7 +64,7 @@ describe('WavePathfinder', () => {
 
       const finder = new WavePathfinder(matrix);
 
-      assert.deepEqual(finder.passabilityMatrix, [[1, 1, 0, 1, 1],
+      assert.deepEqual(finder.obstaclesMatrix, [[1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1],
                                                 [1, 1, 0, 1, 1]]);

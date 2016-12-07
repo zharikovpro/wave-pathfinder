@@ -10,7 +10,7 @@ class WavePathfinder {
   /**
    * Shorthand method for findPath
    *
-   * @param {array} passabilityMatrix
+   * @param {array} obstaclesMatrix
    * @param {number} startX
    * @param {number} startY
    * @param {number} finishX
@@ -20,8 +20,8 @@ class WavePathfinder {
    *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  static findPath(passabilityMatrix, startX, startY, finishX, finishY) {
-    const finder = new this(passabilityMatrix);
+  static findPath(obstaclesMatrix, startX, startY, finishX, finishY) {
+    const finder = new this(obstaclesMatrix);
 
     return finder.findPath(startX, startY, finishX, finishY);
   }
@@ -29,7 +29,7 @@ class WavePathfinder {
   /**
    * Instantiate object based on passability matrix
    *
-   * @param {array} passabilityMatrix - two-dimensional boolean array (x, y)
+   * @param {array} obstaclesMatrix - two-dimensional boolean array (x, y)
    *                where true is passable cell and false is non-passable.
    *                other truthy and falsy values can be used as well.
    *                Example: [ [1, 1, 1], [0, 0, 1], [1, 0, 1] ]
@@ -37,15 +37,15 @@ class WavePathfinder {
    * @return {object} WavePathfinder object
    */
 
-  constructor(passabilityMatrix) {
-    if (!Array.isArray(passabilityMatrix)) {
+  constructor(obstaclesMatrix) {
+    if (!Array.isArray(obstaclesMatrix)) {
       throw new Error('Incorrect matrix!');
     }
 
     this.START_CELL = 0;
     this.UNVISITED_CELL = -1;
 
-    this.passabilityMatrix = passabilityMatrix.map(row => row.slice());
+    this.obstaclesMatrix = obstaclesMatrix.map(row => row.slice());
 
     return this;
   }
@@ -84,12 +84,12 @@ class WavePathfinder {
     this.resultPath = [];
 
     // first part of the wave algorithm - work field matrix initialization
-    this.stepsMatrix = this.passabilityMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
+    this.stepsMatrix = this.obstaclesMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
     this.stepsMatrix[startX][startY] = this.START_CELL;
 
     // second part of the wave algorithm - wave propagation
     const propagateWave = (newX, newY, step) => {
-      if (this.passabilityMatrix[newX] && this.passabilityMatrix[newX][newY]) {
+      if (this.obstaclesMatrix[newX] && this.obstaclesMatrix[newX][newY]) {
         if (this.stepsMatrix[newX][newY] === this.UNVISITED_CELL) {
           this.stepsMatrix[newX][newY] = step + 1;
         }
