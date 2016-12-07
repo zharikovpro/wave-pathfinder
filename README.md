@@ -19,7 +19,7 @@ Changelog:
 
 *Breaking change!* 
 
-Now uses obstaclesMatrix instead of obstaclesMatrix, see [issue #2](https://github.com/zharikovpro/wave-pathfinder/issues/2).
+Now uses obstaclesMatrix instead of passabilityMatrix.
 
 **0.1.0** 
 
