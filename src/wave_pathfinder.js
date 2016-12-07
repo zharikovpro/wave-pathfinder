@@ -11,19 +11,19 @@ class WavePathfinder {
    * Shorthand method for findPath
    *
    * @param {array} passabilityMatrix
-   * @param {number} startX
-   * @param {number} startY
-   * @param {number} finishX
-   * @param {number} finishY
+   * @param {number} startRow
+   * @param {number} startCol
+   * @param {number} finishRow
+   * @param {number} finishCol
    *
    * @return {null|object[]} Path from start to finish or null if not found.
-   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                         Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  static findPath(passabilityMatrix, startX, startY, finishX, finishY) {
+  static findPath(passabilityMatrix, startRow, startCol, finishRow, finishCol) {
     const finder = new this(passabilityMatrix);
 
-    return finder.findPath(startX, startY, finishX, finishY);
+    return finder.findPath(startRow, startCol, finishRow, finishCol);
   }
 
   /**
@@ -59,7 +59,7 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
-   *                 Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
   findPath(startX, startY, finishX, finishY) {
