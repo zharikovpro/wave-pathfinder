@@ -1,5 +1,6 @@
 /**
- * [Classic wave path finding algorithm]{@link https://en.wikipedia.org/wiki/Lee_algorithm}
+ * Classic wave path finding algorithm
+ * Wiki: (https://en.wikipedia.org/wiki/Lee_algorithm)
  *
  * @author Andrey Zharikov & Nikolay Govorov
  *
@@ -9,27 +10,26 @@ class WavePathfinder {
   /**
    * Shorthand method for findPath
    *
-   * @param {array} passabilityMatrix
-   * @param {number} startRow
-   * @param {number} startCol
-   * @param {number} finishRow
-   * @param {number} finishCol
+   * @param {array} obstaclesMatrix
+   * @param {number} startX
+   * @param {number} startY
+   * @param {number} finishX
+   * @param {number} finishY
    *
    * @return {null|object[]} Path from start to finish or null if not found.
-   *                         Array of { row, col } steps.
-   *                         Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
+   *                         Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  static findPath(passabilityMatrix, startRow, startCol, finishRow, finishCol) {
-    const finder = new this(passabilityMatrix);
+  static findPath(obstaclesMatrix, startX, startY, finishX, finishY) {
+    const finder = new this(obstaclesMatrix);
 
-    return finder.findPath(startRow, startCol, finishRow, finishCol);
+    return finder.findPath(startX, startY, finishX, finishY);
   }
 
   /**
    * Instantiate object based on passability matrix
    *
-   * @param {array} passabilityMatrix - two-dimensional boolean array (rows, cols)
+   * @param {array} obstaclesMatrix - two-dimensional boolean array (x, y)
    *                where true is passable cell and false is non-passable.
    *                other truthy and falsy values can be used as well.
    *                Example: [ [1, 1, 1], [0, 0, 1], [1, 0, 1] ]
@@ -37,15 +37,15 @@ class WavePathfinder {
    * @return {object} WavePathfinder object
    */
 
-  constructor(passabilityMatrix) {
-    if (!Array.isArray(passabilityMatrix)) {
+  constructor(obstaclesMatrix) {
+    if (!Array.isArray(obstaclesMatrix)) {
       throw new Error('Incorrect matrix!');
     }
 
     this.START_CELL = 0;
     this.UNVISITED_CELL = -1;
 
-    this.passabilityMatrix = passabilityMatrix.map(row => row.slice());
+    this.obstaclesMatrix = obstaclesMatrix.map(row => row.slice());
 
     return this;
   }
@@ -53,20 +53,19 @@ class WavePathfinder {
   /**
    * Shorthand that combines expandWave + backtracePath.
    *
-   * @param {number} startRow
-   * @param {number} startCol
-   * @param {number} finishRow
-   * @param {number} finishCol
+   * @param {number} startX
+   * @param {number} startY
+   * @param {number} finishX
+   * @param {number} finishY
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
-   *                      Array of { row, col } steps.
-   *                      Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
+   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  findPath(startRow, startCol, finishRow, finishCol) {
-    this.expandWave(startRow, startCol);
+  findPath(startX, startY, finishX, finishY) {
+    this.expandWave(startX, startY);
 
-    return this.backtracePath(finishRow, finishCol);
+    return this.backtracePath(finishX, finishY);
   }
 
   /**
@@ -74,37 +73,37 @@ class WavePathfinder {
    * This method must be called at least once to find shortest paths from start to other cells.
    * Once it has been called, backtracePath can be called multiple times for different finish cells.
    *
-   * @param {number} startRow
-   * @param {number} startCol
+   * @param {number} startX
+   * @param {number} startY
    *
    * @return {array} Steps array with minimum possible steps number for each cell.
    *                 0 means start (current) cell, -1 means unreachable cell.
    */
 
-  expandWave(startRow, startCol) {
+  expandWave(startX, startY) {
     this.resultPath = [];
 
     // first part of the wave algorithm - work field matrix initialization
-    this.stepsMatrix = this.passabilityMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
-    this.stepsMatrix[startRow][startCol] = this.START_CELL;
+    this.stepsMatrix = this.obstaclesMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
+    this.stepsMatrix[startX][startY] = this.START_CELL;
 
     // second part of the wave algorithm - wave propagation
-    const propagateWave = (newRow, newCol, step) => {
-      if (this.passabilityMatrix[newRow] && this.passabilityMatrix[newRow][newCol]) {
-        if (this.stepsMatrix[newRow][newCol] === this.UNVISITED_CELL) {
-          this.stepsMatrix[newRow][newCol] = step + 1;
+    const propagateWave = (newX, newY, step) => {
+      if (this.obstaclesMatrix[newX] && !this.obstaclesMatrix[newX][newY]) {
+        if (this.stepsMatrix[newX][newY] === this.UNVISITED_CELL) {
+          this.stepsMatrix[newX][newY] = step + 1;
         }
       }
     };
 
     for (let step = 0; step < this.stepsMatrix.length * this.stepsMatrix[0].length; step++) {
-      for (let row = 0; row < this.stepsMatrix.length; row++) {
-        for (let col = 0; col < this.stepsMatrix[0].length; col++) {
-          if (this.stepsMatrix[row][col] === step) {
-            propagateWave(row, col + 1, step); // up
-            propagateWave(row + 1, col, step); // right
-            propagateWave(row, col - 1, step); // down
-            propagateWave(row - 1, col, step); // left
+      for (let x = 0; x < this.stepsMatrix.length; x++) {
+        for (let y = 0; y < this.stepsMatrix[0].length; y++) {
+          if (this.stepsMatrix[x][y] === step) {
+            propagateWave(x, y + 1, step); // up
+            propagateWave(x + 1, y, step); // right
+            propagateWave(x, y - 1, step); // down
+            propagateWave(x - 1, y, step); // left
           }
         }
       }
@@ -117,53 +116,52 @@ class WavePathfinder {
    * Finds shortest path from start to finish based on steps matrix.
    * Call this method after expandWave.
    *
-   * @param {number} finishRow
-   * @param {number} finishCol
+   * @param {number} finishX
+   * @param {number} finishY
    *
    * @return {null|array} Path from start to finish or null if not found.
-   *                      Array of { row, col } steps.
-   *                      Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
+   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
-  backtracePath(finishRow, finishCol) {
+  backtracePath(finishX, finishY) {
     if (typeof this.stepsMatrix === 'undefined') {
       throw new Error('Call expandWave first to calculate stepsMatrix!');
     }
 
-    if (this.stepsMatrix[finishRow][finishCol] === this.UNVISITED_CELL) {
+    if (this.stepsMatrix[finishX][finishY] === this.UNVISITED_CELL) {
       this.resultPath = null;
       return null;
     }
 
     this.resultPath = [];
 
-    let currentRow = finishRow;
-    let currentCol = finishCol;
+    let currentX = finishX;
+    let currentY = finishY;
 
-    const addStep = (row, col) => {
-      this.resultPath.push([ row, col ]);
+    const addStep = (x, y) => {
+      this.resultPath.push({ x, y });
     };
 
-    addStep(finishRow, finishCol);
+    addStep(finishX, finishY);
 
-    const propagateWave = (newRow, newCol, step) => {
-      if (this.stepsMatrix[newRow] !== undefined) {
-        if (this.stepsMatrix[newRow][newCol] === step - 1) {
-          addStep(newRow, newCol);
-          currentRow = newRow;
-          currentCol = newCol;
+    const propagateWave = (newX, newY, step) => {
+      if (this.stepsMatrix[newX] !== undefined) {
+        if (this.stepsMatrix[newX][newY] === step - 1) {
+          addStep(newX, newY);
+          currentX = newX;
+          currentY = newY;
           if (step === 1) return true;
         }
       }
       return false;
     };
 
-    for (let step = this.stepsMatrix[finishRow][finishCol]; step >= 0; step--) {
+    for (let step = this.stepsMatrix[finishX][finishY]; step >= 0; step--) {
       if (
-        propagateWave(currentRow + 1, currentCol, step) ||
-        propagateWave(currentRow - 1, currentCol, step) ||
-        propagateWave(currentRow, currentCol + 1, step) ||
-        propagateWave(currentRow, currentCol - 1, step)
+        propagateWave(currentX + 1, currentY, step) ||
+        propagateWave(currentX - 1, currentY, step) ||
+        propagateWave(currentX, currentY + 1, step) ||
+        propagateWave(currentX, currentY - 1, step)
       ) {
         break;
       }

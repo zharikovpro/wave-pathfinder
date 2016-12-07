@@ -12,6 +12,19 @@ Advantages of wave algorithm:
 * Ability to quickly get matrix of all reachable cells with number of steps required
 * Once steps matrix has been calculated for start cell, it's very fast to find path to any reachable cell 
 
+Changelog:
+----------
+
+**1.0.0**
+
+*Breaking change!* 
+
+Now uses obstaclesMatrix instead of obstaclesMatrix, see [issue #2](https://github.com/zharikovpro/wave-pathfinder/issues/2).
+
+**0.1.0** 
+
+Working version
+
 Installation:
 -------------
 
@@ -25,29 +38,29 @@ Quick example:
 ```
 var WavePathfinder = require('wave-pathfinder');
 
-// use "truthy" values for passable cells 
-// use "falsy" values for non-passable cells 
-var passabilityMatrix = [
-  [ 1, 1, 1 ],
-  [ 0, 0, 1 ],
-  [ 1, 0, 1 ]
+// use "truthy" values for obstacles 
+// use "falsy" values for passable cells 
+var obstaclesMatrix = [
+  [ 0, 0, 0 ],
+  [ 1, 1, 0 ],
+  [ 0, 1, 0 ]
 ];
 
-var startRow = 0;
-var startCol = 0;
+var startX = 0;
+var startY = 0;
 
-var finishRow = 2;
-var finishCol = 2;
+var finishX = 2;
+var finishY = 2;
 
-var path = WavePathfinder.findPath(passabilityMatrix, startRow, startCol, finishRow, finishCol);
+var path = WavePathfinder.findPath(obstaclesMatrix, startX, startY, finishX, finishY);
 console.log(path); 
 
 /* [ 
-  { 0, 0 },
-  { 0, 1 },
-  { 0, 2 },
-  { 1, 2 },
-  { 2, 2 } 
+  { x: 0, y: 0 },
+  { x: 0, y: 1 },
+  { x: 0, y: 2 },
+  { x: 1, y: 2 },
+  { x: 2, y: 2 } 
 ] */
 ```
 
@@ -61,24 +74,24 @@ If you want to get access to the steps matrix and/or find multiple paths from on
 ```
 var WavePathfinder = require('wave-pathfinder');
 
-// use "truthy" values for passable cells 
-// use "falsy" values for non-passable cells 
-var passabilityMatrix = [
-  [ 1, 1, 1 ],
-  [ 0, 0, 1 ],
-  [ 1, 0, 1 ]
+// use "truthy" values for obstacles 
+// use "falsy" values for passable cells 
+var obstaclesMatrix = [
+  [ 0, 0, 0 ],
+  [ 1, 1, 0 ],
+  [ 0, 1, 0 ]
 ];
 
-var pathfinder = new WavePathfinder(passabilityMatrix);
+var pathfinder = new WavePathfinder(obstaclesMatrix);
 ```
 
 2) Call "expandWave" to calculate possible steps matrix for given start cell. There's no need to call expandWave again after that, if start cell remains the same.
 
 ```
-var startRow = 0;
-var startCol = 0;
+var startX = 0;
+var startY = 0;
 
-var stepsMatrix = pathfinder.expandWave(startRow, startCol);
+var stepsMatrix = pathfinder.expandWave(startX, startY);
 console.log(stepsMatrix); 
 console.log(pathfinder.stepsMatrix); // same as above 
 
@@ -96,49 +109,49 @@ console.log(pathfinder.stepsMatrix); // same as above
 3) Call "backtracePath" to get path from start (which was setup during previous expandWave call) to given finish.
 
 ```
-var finishRow1 = 2;
-var finishCol1 = 2;
+var finishX1 = 2;
+var finishY1 = 2;
 
-var path1 = pathfinder.backtracePath(finishRow1, finishCol1);
+var path1 = pathfinder.backtracePath(finishX1, finishY1);
 console.log(path1); 
 
 /* [ 
-  { 0, 0 },
-  { 0, 1 },
-  { 0, 2 },
-  { 1, 2 },
-  { 2, 2 } 
+  { x: 0, y: 0 },
+  { x: 0, y: 1 },
+  { x: 0, y: 2 },
+  { x: 1, y: 2 },
+  { x: 2, y: 2 } 
 ] */
 
-var finishRow2 = 1;
-var finishCol2 = 1;
+var finishX2 = 1;
+var finishY2 = 1;
 
-var path2 = pathfinder.backtracePath(finishCol2, finishCol2);
+var path2 = pathfinder.backtracePath(finishY2, finishY2);
 console.log(path2);
  
 /* [ 
-  { 0, 0 },
-  { 0, 1 },
-  { 0, 2 }
+  { x: 0, y: 0 },
+  { x: 0, y: 1 },
+  { x: 0, y: 2 }
 ] */
 ```
 
 4) Or, call shorthand "findPath" which will call expandWave and backtracePath under the hood.
 
 ```
-var startRow = 0;
-var startCol = 0;
+var startX = 0;
+var startY = 0;
 
-var finishRow = 1;
-var finishCol = 1;
+var finishX = 1;
+var finishY = 1;
 
-var path = pathfinder.findPath(startRow, startCol, finishRow, finishCol);
+var path = pathfinder.findPath(startX, startY, finishX, finishY);
 console.log(path);
 
 /* [ 
-  { 0, 0 },
-  { 0, 1 },
-  { 0, 2 }
+  { x: 0, y: 0 },
+  { x: 0, y: 1 },
+  { x: 0, y: 2 }
 ] */
 
 var stepsMatrix = pathfinder.stepsMatrix;
