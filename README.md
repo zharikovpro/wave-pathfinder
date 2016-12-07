@@ -12,6 +12,19 @@ Advantages of wave algorithm:
 * Ability to quickly get matrix of all reachable cells with number of steps required
 * Once steps matrix has been calculated for start cell, it's very fast to find path to any reachable cell 
 
+Changelog:
+----------
+
+**1.0.0**
+
+*Breaking change!* 
+
+Now uses obstaclesMatrix instead of obstaclesMatrix, see [issue #2](https://github.com/zharikovpro/wave-pathfinder/issues/2).
+
+**0.1.0** 
+
+Working version
+
 Installation:
 -------------
 
@@ -25,12 +38,12 @@ Quick example:
 ```
 var WavePathfinder = require('wave-pathfinder');
 
-// use "truthy" values for passable cells 
-// use "falsy" values for non-passable cells 
-var passabilityMatrix = [
-  [ 1, 1, 1 ],
-  [ 0, 0, 1 ],
-  [ 1, 0, 1 ]
+// use "truthy" values for obstacles 
+// use "falsy" values for passable cells 
+var obstaclesMatrix = [
+  [ 0, 0, 0 ],
+  [ 1, 1, 0 ],
+  [ 0, 1, 0 ]
 ];
 
 var startX = 0;
@@ -39,7 +52,7 @@ var startY = 0;
 var finishX = 2;
 var finishY = 2;
 
-var path = WavePathfinder.findPath(passabilityMatrix, startX, startY, finishX, finishY);
+var path = WavePathfinder.findPath(obstaclesMatrix, startX, startY, finishX, finishY);
 console.log(path); 
 
 /* [ 
@@ -61,15 +74,15 @@ If you want to get access to the steps matrix and/or find multiple paths from on
 ```
 var WavePathfinder = require('wave-pathfinder');
 
-// use "truthy" values for passable cells 
-// use "falsy" values for non-passable cells 
-var passabilityMatrix = [
-  [ 1, 1, 1 ],
-  [ 0, 0, 1 ],
-  [ 1, 0, 1 ]
+// use "truthy" values for obstacles 
+// use "falsy" values for passable cells 
+var obstaclesMatrix = [
+  [ 0, 0, 0 ],
+  [ 1, 1, 0 ],
+  [ 0, 1, 0 ]
 ];
 
-var pathfinder = new WavePathfinder(passabilityMatrix);
+var pathfinder = new WavePathfinder(obstaclesMatrix);
 ```
 
 2) Call "expandWave" to calculate possible steps matrix for given start cell. There's no need to call expandWave again after that, if start cell remains the same.

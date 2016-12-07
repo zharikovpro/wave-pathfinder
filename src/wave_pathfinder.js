@@ -17,7 +17,7 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|object[]} Path from start to finish or null if not found.
-   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                         Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
   static findPath(obstaclesMatrix, startX, startY, finishX, finishY) {
@@ -59,7 +59,7 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
-   *                 Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
    */
 
   findPath(startX, startY, finishX, finishY) {
@@ -89,7 +89,7 @@ class WavePathfinder {
 
     // second part of the wave algorithm - wave propagation
     const propagateWave = (newX, newY, step) => {
-      if (this.obstaclesMatrix[newX] && this.obstaclesMatrix[newX][newY]) {
+      if (this.obstaclesMatrix[newX] && !this.obstaclesMatrix[newX][newY]) {
         if (this.stepsMatrix[newX][newY] === this.UNVISITED_CELL) {
           this.stepsMatrix[newX][newY] = step + 1;
         }

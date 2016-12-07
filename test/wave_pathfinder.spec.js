@@ -26,7 +26,7 @@ const mapOptions = (drawing) => {
         finish = { x, y };
       }
 
-      matrix[x][y] = (matrix[x][y] === 'x') ? 0 : 1;
+      matrix[x][y] = matrix[x][y] === 'x';
     }
   }
 
@@ -64,10 +64,10 @@ describe('WavePathfinder', () => {
 
       const finder = new WavePathfinder(matrix);
 
-      assert.deepEqual(finder.obstaclesMatrix, [[1, 1, 0, 1, 1],
-                                                [1, 1, 0, 1, 1],
-                                                [1, 1, 0, 1, 1],
-                                                [1, 1, 0, 1, 1]]);
+      assert.deepEqual(finder.obstaclesMatrix, [[false, false, true, false, false],
+                                                [false, false, true, false, false],
+                                                [false, false, true, false, false],
+                                                [false, false, true, false, false]]);
     });
   });
 
