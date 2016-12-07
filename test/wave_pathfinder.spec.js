@@ -14,36 +14,36 @@ const mapOptions = (drawing) => {
   let matrix = drawing.replace(/ /g, '').split('\n');
   matrix = matrix.map(line => line.substr(1, (line.length - 2)).split('|'));
 
-  for (let x = 0; x < matrix.length; x++) {
-    for (let y = 0; y < matrix[x].length; y++) {
-      const step = parseInt(matrix[x][y], 10);
+  for (let row = 0; row < matrix.length; row++) {
+    for (let col = 0; col < matrix[row].length; col++) {
+      const step = parseInt(matrix[row][col], 10);
 
       if (!isNaN(step)) {
-        steps.push({ x, y, step });
-      } else if (matrix[x][y] === 'A') {
-        start = { x, y };
-      } else if (matrix[x][y] === 'B') {
-        finish = { x, y };
+        steps.push({ row, col, step });
+      } else if (matrix[row][col] === 'A') {
+        start = { row, col };
+      } else if (matrix[row][col] === 'B') {
+        finish = { row, col };
       }
 
-      matrix[x][y] = (matrix[x][y] === 'x') ? 0 : 1;
+      matrix[row][col] = (matrix[row][col] === 'x') ? 0 : 1;
     }
   }
 
   if (steps.length === 0) {
     steps = null;
   } else {
-    steps.push({ x: start.x, y: start.y, step: 0 });
-    steps.push({ x: finish.x, y: finish.y, step: steps.length });
-    steps = steps.sort((a, b) => a.step - b.step).map(step => ([ step.x, step.y ]));
+    steps.push({ row: start.row, col: start.col, step: 0 });
+    steps.push({ row: finish.row, col: finish.col, step: steps.length });
+    steps = steps.sort((a, b) => a.step - b.step).map(step => ([ step.row, step.col ]));
   }
 
   return {
     matrix,
-    startRow: start.x,
-    startCol: start.y,
-    finishRow: finish.x,
-    finishCol: finish.y,
+    startRow: start.row,
+    startCol: start.col,
+    finishRow: finish.row,
+    finishCol: finish.col,
     resultPath: steps,
   };
 };
