@@ -1,6 +1,5 @@
 /**
- * Classic wave path finding algorithm
- * Wiki: (https://en.wikipedia.org/wiki/Lee_algorithm)
+ * [Classic wave path finding algorithm]{@link https://en.wikipedia.org/wiki/Lee_algorithm}
  *
  * @author Andrey Zharikov & Nikolay Govorov
  *
@@ -30,7 +29,7 @@ class WavePathfinder {
   /**
    * Instantiate object based on passability matrix
    *
-   * @param {array} passabilityMatrix - two-dimensional boolean array (x, y)
+   * @param {array} passabilityMatrix - two-dimensional boolean array (rows, cols)
    *                where true is passable cell and false is non-passable.
    *                other truthy and falsy values can be used as well.
    *                Example: [ [1, 1, 1], [0, 0, 1], [1, 0, 1] ]
