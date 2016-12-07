@@ -17,7 +17,8 @@ class WavePathfinder {
    * @param {number} finishCol
    *
    * @return {null|object[]} Path from start to finish or null if not found.
-   *                         Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                         Array of { row, col } steps.
+   *                         Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
    */
 
   static findPath(passabilityMatrix, startRow, startCol, finishRow, finishCol) {
@@ -59,7 +60,8 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
-   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                      Array of { row, col } steps.
+   *                      Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
    */
 
   findPath(startX, startY, finishX, finishY) {
@@ -120,7 +122,8 @@ class WavePathfinder {
    * @param {number} finishCol
    *
    * @return {null|array} Path from start to finish or null if not found.
-   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                      Array of { row, col } steps.
+   *                      Example: [ { 0, 0 }, { 0, 1 }, { 0, 2 } ]
    */
 
   backtracePath(finishRow, finishCol) {
