@@ -35,7 +35,7 @@ const mapOptions = (drawing) => {
   } else {
     steps.push({ x: start.x, y: start.y, step: 0 });
     steps.push({ x: finish.x, y: finish.y, step: steps.length });
-    steps = steps.sort((a, b) => a.step - b.step).map(step => ({ x: step.x, y: step.y }));
+    steps = steps.sort((a, b) => a.step - b.step).map(step => ([ step.x, step.y ]));
   }
 
   return {

@@ -138,8 +138,8 @@ class WavePathfinder {
     let currentRow = finishRow;
     let currentCol = finishCol;
 
-    const addStep = (x, y) => {
-      this.resultPath.push({ x, y });
+    const addStep = (row, col) => {
+      this.resultPath.push([ row, col ]);
     };
 
     addStep(finishRow, finishCol);
