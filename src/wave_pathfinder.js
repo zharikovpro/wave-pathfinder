@@ -17,7 +17,7 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|object[]} Path from start to finish or null if not found.
-   *                         Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                         Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
   static findPath(obstaclesMatrix, startX, startY, finishX, finishY) {
@@ -59,7 +59,7 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
-   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
   findPath(startX, startY, finishX, finishY) {
@@ -120,7 +120,7 @@ class WavePathfinder {
    * @param {number} finishY
    *
    * @return {null|array} Path from start to finish or null if not found.
-   *                      Example: [ { x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 } ]
+   *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
   backtracePath(finishX, finishY) {
@@ -139,7 +139,7 @@ class WavePathfinder {
     let currentY = finishY;
 
     const addStep = (x, y) => {
-      this.resultPath.push({ x, y });
+      this.resultPath.push([ y, x ]);
     };
 
     addStep(finishX, finishY);

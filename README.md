@@ -15,11 +15,17 @@ Advantages of wave algorithm:
 Changelog:
 ----------
 
+**2.0.0**
+
+*Breaking change!*
+
+Returns path as an array of points in matrix notation: [ [y1, x1], [y2, x2], ... ]
+
 **1.0.1**
 
 *Breaking change!* 
 
-Now uses obstaclesMatrix instead of passabilityMatrix.
+Uses obstaclesMatrix instead of passabilityMatrix.
 
 **0.1.0** 
 
@@ -56,11 +62,11 @@ var path = WavePathfinder.findPath(obstaclesMatrix, startX, startY, finishX, fin
 console.log(path); 
 
 /* [ 
-  { x: 0, y: 0 },
-  { x: 0, y: 1 },
-  { x: 0, y: 2 },
-  { x: 1, y: 2 },
-  { x: 2, y: 2 } 
+  [0, 0],
+  [0, 1],
+  [0, 2],
+  [1, 2],
+  [2, 2] 
 ] */
 ```
 
@@ -116,11 +122,11 @@ var path1 = pathfinder.backtracePath(finishX1, finishY1);
 console.log(path1); 
 
 /* [ 
-  { x: 0, y: 0 },
-  { x: 0, y: 1 },
-  { x: 0, y: 2 },
-  { x: 1, y: 2 },
-  { x: 2, y: 2 } 
+  [0, 0],
+  [0, 1],
+  [0, 2],
+  [1, 2],
+  [2, 2] 
 ] */
 
 var finishX2 = 1;
@@ -130,9 +136,9 @@ var path2 = pathfinder.backtracePath(finishY2, finishY2);
 console.log(path2);
  
 /* [ 
-  { x: 0, y: 0 },
-  { x: 0, y: 1 },
-  { x: 0, y: 2 }
+  [0, 0],
+  [0, 1],
+  [0, 2]
 ] */
 ```
 
@@ -149,9 +155,9 @@ var path = pathfinder.findPath(startX, startY, finishX, finishY);
 console.log(path);
 
 /* [ 
-  { x: 0, y: 0 },
-  { x: 0, y: 1 },
-  { x: 0, y: 2 }
+  [0, 0],
+  [0, 1],
+  [0, 2]
 ] */
 
 var stepsMatrix = pathfinder.stepsMatrix;
