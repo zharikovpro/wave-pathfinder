@@ -1,19 +1,25 @@
 import chai from 'chai'; // eslint-disable-line import/no-extraneous-dependencies
+import fs from 'fs';
 
 const { assert } = chai;
 const WavePathfinder = require('../src/wave_pathfinder');
 
 chai.should();
 
+const readMap = (path) => fs.readFileSync(path, 'utf8').trim();
+
 // helper function to generate test cases from ASCII maps
 const mapOptions = (drawing) => {
-  let start = {};
-  let finish = {};
+  let startX = null;
+  let startY = null;
+  let finishX = null;
+  let finishY = null;
   let steps = [];
 
   let matrix = drawing.replace(/ /g, '').split('\n');
   matrix = matrix.map(line => line.substr(1, (line.length - 2)).split('|'));
 
+  // TODO: swap y and x, as in class itself rows should be first
   for (let x = 0; x < matrix.length; x++) {
     for (let y = 0; y < matrix[x].length; y++) {
       const step = parseInt(matrix[x][y], 10);
@@ -21,9 +27,11 @@ const mapOptions = (drawing) => {
       if (!isNaN(step)) {
         steps.push({ x, y, step });
       } else if (matrix[x][y] === 'A') {
-        start = { x, y };
+        startX = x;
+        startY = y;
       } else if (matrix[x][y] === 'B') {
-        finish = { x, y };
+        finishX = x;
+        finishY = y;
       }
 
       matrix[x][y] = matrix[x][y] === 'x';
@@ -33,38 +41,31 @@ const mapOptions = (drawing) => {
   if (steps.length === 0) {
     steps = null;
   } else {
-    steps.push({ x: start.x, y: start.y, step: 0 });
-    steps.push({ x: finish.x, y: finish.y, step: steps.length });
-    steps = steps.sort((a, b) => a.step - b.step).map(step => ([ step.y, step.x ]));
+    steps.push({ x: startX, y: startY, step: 0 });
+    steps.push({ x: finishX, y: finishY, step: steps.length });
+    steps = steps.sort((a, b) => a.step - b.step).map(step => ([step.y, step.x]));
   }
 
-  return {
-    matrix,
-    startX: start.x,
-    startY: start.y,
-    finishX: finish.x,
-    finishY: finish.y,
-    resultPath: steps,
-  };
+  return { matrix, startY, startX, finishY, finishX, steps };
 };
+
+// TODO: describe('loadMap')
 
 describe('WavePathfinder', () => {
   describe('constructor', () => {
     it('throws exception when obstaclesMatrix argument is not an array', () => {
       (() => {
-        new WavePathfinder('bla-bla-bla');
+        new WavePathfinder('bla-bla-bla'); // eslint-disable-line no-new
       }).should.throw(Error);
     });
 
     it('makes a copy of passed obstaclesMatrix argument', () => {
-      const { matrix } = mapOptions(`|A| |x| | |
-                                     | | |x| | |
-                                     | | |x| | |
-                                     | | |x|B| |`);
+      const { matrix } = mapOptions(readMap('test/maps/load/wall.txt'));
 
       const finder = new WavePathfinder(matrix);
 
       assert.deepEqual(finder.obstaclesMatrix, [[false, false, true, false, false],
+                                                [false, false, true, false, false],
                                                 [false, false, true, false, false],
                                                 [false, false, true, false, false],
                                                 [false, false, true, false, false]]);
@@ -94,11 +95,11 @@ describe('WavePathfinder', () => {
 
     tests.forEach((test) => {
       it(test.name, () => {
-        const { matrix, resultPath, startX, startY, finishX, finishY } = mapOptions(test.map);
+        const { matrix, steps, startX, startY, finishX, finishY } = mapOptions(test.map);
 
         const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
 
-        assert.deepEqual(path, resultPath);
+        assert.deepEqual(path, steps);
       });
     }); // forEach
   }); // describe - findPath
@@ -106,7 +107,7 @@ describe('WavePathfinder', () => {
   describe('backtracePath', () => {
     it('throws exception if expandWave was not called before', () => {
       (() => {
-        const finder = new WavePathfinder([ [0, 1], [1, 0] ]);
+        const finder = new WavePathfinder([[0, 1], [1, 0]]);
         finder.backtracePath(1, 1);
       }).should.throw(Error);
     });
