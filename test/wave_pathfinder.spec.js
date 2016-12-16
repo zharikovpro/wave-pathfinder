@@ -125,9 +125,7 @@ describe('WavePathfinder', () => {
 
       const finder = new WavePathfinder(matrix);
 
-      assert.deepEqual(finder.obstaclesMatrix, [[false, false, true, false, false],
-                                                [false, false, true, false, false],
-                                                [false, false, true, false, false]]);
+      assert.deepEqual(finder.obstaclesMatrix, matrix);
     });
   });
 
