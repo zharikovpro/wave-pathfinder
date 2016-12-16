@@ -90,7 +90,7 @@ describe('loadMap helper function', () => {
                                   [false, false, true, false, false]]);
   });
 
-  it('loads passable map', () => {
+  it('detects path on passable map', () => {
     const map = loadMap(readMap('test/maps/load/passable.txt'));
 
     assert.equal(map.startY, 0);
@@ -134,27 +134,18 @@ describe('WavePathfinder', () => {
   describe('findPath', () => {
     const tests = [{
       name: 'returns null when there is no path',
-      map: `|A| |x| | |
-            | | |x| | |
-            | | |x| | |
-            | | |x|B| |`,
+      map: 'test/maps/impassable/wall-vertical.txt',
     }, {
       name: 'returns path from left to right',
-      map: `|A|1|2|3|4|
-            |x|x|x|x|5|
-            |x| | |x|6|
-            | | | |x|B|`,
+      map: 'test/maps/passable/top-left-to-bottom-right.txt',
     }, {
       name: 'returns path from right to left',
-      map: `|B|6|x| | |
-            |x|5|4|x| |
-            | |x|3|2|x|
-            | | |x|1|A|`,
+      map: 'test/maps/passable/bottom-right-to-top-left.txt',
     }];
 
     tests.forEach((test) => {
       it(test.name, () => {
-        const { matrix, steps, startY, startX, finishY, finishX } = loadMap(test.map);
+        const { matrix, steps, startY, startX, finishY, finishX } = loadMap(readMap(test.map));
 
         const path = WavePathfinder.findPath(matrix, startY, startX, finishY, finishX);
 
