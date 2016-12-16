@@ -88,10 +88,10 @@ class WavePathfinder {
     this.stepsMatrix[startY][startX] = this.START_CELL;
 
     // second part of the wave algorithm - wave propagation
-    const propagateWave = (newX, newY, step) => {
-      if (this.obstaclesMatrix[newX] && !this.obstaclesMatrix[newX][newY]) {
-        if (this.stepsMatrix[newX][newY] === this.UNVISITED_CELL) {
-          this.stepsMatrix[newX][newY] = step + 1;
+    const propagateWave = (newY, newX, step) => {
+      if (this.obstaclesMatrix[newY] && !this.obstaclesMatrix[newY][newX]) {
+        if (this.stepsMatrix[newY][newX] === this.UNVISITED_CELL) {
+          this.stepsMatrix[newY][newX] = step + 1;
         }
       }
     };
@@ -144,12 +144,12 @@ class WavePathfinder {
 
     addStep(finishY, finishX);
 
-    const propagateWave = (newX, newY, step) => {
-      if (this.stepsMatrix[newX] !== undefined) {
-        if (this.stepsMatrix[newX][newY] === step - 1) {
-          addStep(newX, newY);
-          currentX = newX;
-          currentY = newY;
+    const propagateWave = (newY, newX, step) => {
+      if (this.stepsMatrix[newY] !== undefined) {
+        if (this.stepsMatrix[newY][newX] === step - 1) {
+          addStep(newY, newX);
+          currentX = newY;
+          currentY = newX;
           if (step === 1) return true;
         }
       }
