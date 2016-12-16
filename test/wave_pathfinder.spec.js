@@ -9,11 +9,11 @@ chai.should();
 const readMap = (path) => fs.readFileSync(path, 'utf8').trim();
 
 // helper function to generate test cases from ASCII maps
-const mapOptions = (drawing) => {
-  let startX = null;
+const loadMap = (drawing) => {
   let startY = null;
-  let finishX = null;
+  let startX = null;
   let finishY = null;
+  let finishX = null;
   let steps = [];
 
   let matrix = drawing.replace(/ /g, '').split('\n');
@@ -49,7 +49,46 @@ const mapOptions = (drawing) => {
   return { matrix, startY, startX, finishY, finishX, steps };
 };
 
-// TODO: describe('loadMap')
+describe('loadMap helper function', () => {
+  it('loads completely empty map', () => {
+    const map = loadMap(readMap('test/maps/load/empty.txt'));
+
+    assert.isNull(map.steps);
+    assert.isNull(map.startY);
+    assert.isNull(map.startX);
+    assert.isNull(map.finishY);
+    assert.isNull(map.finishX);
+    assert.deepEqual(map.matrix, [[false, false, false, false, false],
+                                  [false, false, false, false, false],
+                                  [false, false, false, false, false]]);
+  });
+
+  it('loads completely occupied map', () => {
+    const map = loadMap(readMap('test/maps/load/full.txt'));
+
+    assert.isNull(map.steps);
+    assert.isNull(map.startY);
+    assert.isNull(map.startX);
+    assert.isNull(map.finishY);
+    assert.isNull(map.finishX);
+    assert.deepEqual(map.matrix, [[true, true, true, true, true],
+                                  [true, true, true, true, true],
+                                  [true, true, true, true, true]]);
+  });
+
+  it('loads impassable map', () => {
+      const map = loadMap(readMap('test/maps/load/impassable.txt'));
+
+      assert.isNull(map.steps);
+      assert.equal(map.startY, 0);
+      assert.equal(map.startX, 0);
+      assert.equal(map.finishY, 2);
+      assert.equal(map.finishX, 4);
+      assert.deepEqual(map.matrix, [[false, false, true, false, false],
+                                    [false, false, true, false, false],
+                                    [false, false, true, false, false]]);
+  });
+});
 
 describe('WavePathfinder', () => {
   describe('constructor', () => {
@@ -60,7 +99,7 @@ describe('WavePathfinder', () => {
     });
 
     it('makes a copy of passed obstaclesMatrix argument', () => {
-      const { matrix } = mapOptions(readMap('test/maps/load/wall.txt'));
+      const { matrix } = loadMap(readMap('test/maps/load/impassable.txt'));
 
       const finder = new WavePathfinder(matrix);
 
@@ -95,7 +134,7 @@ describe('WavePathfinder', () => {
 
     tests.forEach((test) => {
       it(test.name, () => {
-        const { matrix, steps, startX, startY, finishX, finishY } = mapOptions(test.map);
+        const { matrix, steps, startX, startY, finishX, finishY } = loadMap(test.map);
 
         const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
 
