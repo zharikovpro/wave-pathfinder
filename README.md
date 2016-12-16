@@ -15,6 +15,10 @@ Advantages of wave algorithm:
 Changelog:
 ----------
 
+**2.1.0**
+
+Better tests and docs reflect changes since v1.
+
 **2.0.0**
 
 *Breaking change!*
@@ -52,13 +56,13 @@ var obstaclesMatrix = [
   [ 0, 1, 0 ]
 ];
 
-var startX = 0;
 var startY = 0;
+var startX = 0;
 
-var finishX = 2;
 var finishY = 2;
+var finishX = 2;
 
-var path = WavePathfinder.findPath(obstaclesMatrix, startX, startY, finishX, finishY);
+var path = WavePathfinder.findPath(obstaclesMatrix, startY, startX, finishY, finishX);
 console.log(path); 
 
 /* [ 
@@ -94,10 +98,10 @@ var pathfinder = new WavePathfinder(obstaclesMatrix);
 2) Call "expandWave" to calculate possible steps matrix for given start cell. There's no need to call expandWave again after that, if start cell remains the same.
 
 ```
-var startX = 0;
 var startY = 0;
+var startX = 0;
 
-var stepsMatrix = pathfinder.expandWave(startX, startY);
+var stepsMatrix = pathfinder.expandWave(startY, startX);
 console.log(stepsMatrix); 
 console.log(pathfinder.stepsMatrix); // same as above 
 
@@ -115,10 +119,10 @@ console.log(pathfinder.stepsMatrix); // same as above
 3) Call "backtracePath" to get path from start (which was setup during previous expandWave call) to given finish.
 
 ```
-var finishX1 = 2;
 var finishY1 = 2;
+var finishX1 = 2;
 
-var path1 = pathfinder.backtracePath(finishX1, finishY1);
+var path1 = pathfinder.backtracePath(finishY1, finishX1);
 console.log(path1); 
 
 /* [ 
@@ -129,10 +133,10 @@ console.log(path1);
   [2, 2] 
 ] */
 
-var finishX2 = 1;
 var finishY2 = 1;
+var finishX2 = 1;
 
-var path2 = pathfinder.backtracePath(finishY2, finishY2);
+var path2 = pathfinder.backtracePath(finishY2, finishX2);
 console.log(path2);
  
 /* [ 
@@ -145,13 +149,13 @@ console.log(path2);
 4) Or, call shorthand "findPath" which will call expandWave and backtracePath under the hood.
 
 ```
-var startX = 0;
 var startY = 0;
+var startX = 0;
 
-var finishX = 1;
 var finishY = 1;
+var finishX = 1;
 
-var path = pathfinder.findPath(startX, startY, finishX, finishY);
+var path = pathfinder.findPath(startY, startX, finishY, finishX);
 console.log(path);
 
 /* [ 
