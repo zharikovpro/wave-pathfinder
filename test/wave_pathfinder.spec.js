@@ -154,9 +154,9 @@ describe('WavePathfinder', () => {
 
     tests.forEach((test) => {
       it(test.name, () => {
-        const { matrix, steps, startX, startY, finishX, finishY } = loadMap(test.map);
+        const { matrix, steps, startY, startX, finishY, finishX } = loadMap(test.map);
 
-        const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
+        const path = WavePathfinder.findPath(matrix, startY, startX, finishY, finishX);
 
         assert.deepEqual(path, steps);
       });

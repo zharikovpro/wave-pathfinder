@@ -138,7 +138,7 @@ class WavePathfinder {
     let currentX = finishX;
     let currentY = finishY;
 
-    const addStep = (x, y) => {
+    const addStep = (y, x) => {
       this.resultPath.push([y, x]);
     };
 
