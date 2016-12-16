@@ -11,8 +11,8 @@ class WavePathfinder {
    * Shorthand method for findPath
    *
    * @param {array} obstaclesMatrix
-   * @param {number} startX
    * @param {number} startY
+   * @param {number} startX
    * @param {number} finishX
    * @param {number} finishY
    *
@@ -20,10 +20,10 @@ class WavePathfinder {
    *                         Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  static findPath(obstaclesMatrix, startX, startY, finishX, finishY) {
+  static findPath(obstaclesMatrix, startY, startX, finishX, finishY) {
     const finder = new this(obstaclesMatrix);
 
-    return finder.findPath(startX, startY, finishX, finishY);
+    return finder.findPath(startY, startX, finishX, finishY);
   }
 
   /**
@@ -53,8 +53,8 @@ class WavePathfinder {
   /**
    * Shorthand that combines expandWave + backtracePath.
    *
-   * @param {number} startX
    * @param {number} startY
+   * @param {number} startX
    * @param {number} finishX
    * @param {number} finishY
    *
@@ -62,8 +62,8 @@ class WavePathfinder {
    *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  findPath(startX, startY, finishX, finishY) {
-    this.expandWave(startX, startY);
+  findPath(startY, startX, finishX, finishY) {
+    this.expandWave(startY, startX);
 
     return this.backtracePath(finishX, finishY);
   }
@@ -73,19 +73,19 @@ class WavePathfinder {
    * This method must be called at least once to find shortest paths from start to other cells.
    * Once it has been called, backtracePath can be called multiple times for different finish cells.
    *
-   * @param {number} startX
    * @param {number} startY
+   * @param {number} startX
    *
    * @return {array} Steps array with minimum possible steps number for each cell.
    *                 0 means start (current) cell, -1 means unreachable cell.
    */
 
-  expandWave(startX, startY) {
+  expandWave(startY, startX) {
     this.resultPath = [];
 
     // first part of the wave algorithm - work field matrix initialization
     this.stepsMatrix = this.obstaclesMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
-    this.stepsMatrix[startX][startY] = this.START_CELL;
+    this.stepsMatrix[startY][startX] = this.START_CELL;
 
     // second part of the wave algorithm - wave propagation
     const propagateWave = (newX, newY, step) => {
