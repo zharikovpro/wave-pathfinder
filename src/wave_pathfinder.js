@@ -13,17 +13,17 @@ class WavePathfinder {
    * @param {array} obstaclesMatrix
    * @param {number} startY
    * @param {number} startX
-   * @param {number} finishX
    * @param {number} finishY
+   * @param {number} finishX
    *
    * @return {null|object[]} Path from start to finish or null if not found.
    *                         Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  static findPath(obstaclesMatrix, startY, startX, finishX, finishY) {
+  static findPath(obstaclesMatrix, startY, startX, finishY, finishX) {
     const finder = new this(obstaclesMatrix);
 
-    return finder.findPath(startY, startX, finishX, finishY);
+    return finder.findPath(startY, startX, finishY, finishX);
   }
 
   /**
@@ -55,17 +55,17 @@ class WavePathfinder {
    *
    * @param {number} startY
    * @param {number} startX
-   * @param {number} finishX
    * @param {number} finishY
+   * @param {number} finishX
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
    *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  findPath(startY, startX, finishX, finishY) {
+  findPath(startY, startX, finishY, finishX) {
     this.expandWave(startY, startX);
 
-    return this.backtracePath(finishX, finishY);
+    return this.backtracePath(finishY, finishX);
   }
 
   /**
@@ -116,33 +116,33 @@ class WavePathfinder {
    * Finds shortest path from start to finish based on steps matrix.
    * Call this method after expandWave.
    *
-   * @param {number} finishX
    * @param {number} finishY
+   * @param {number} finishX
    *
    * @return {null|array} Path from start to finish or null if not found.
    *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  backtracePath(finishX, finishY) {
+  backtracePath(finishY, finishX) {
     if (typeof this.stepsMatrix === 'undefined') {
       throw new Error('Call expandWave first to calculate stepsMatrix!');
     }
 
-    if (this.stepsMatrix[finishX][finishY] === this.UNVISITED_CELL) {
+    if (this.stepsMatrix[finishY][finishX] === this.UNVISITED_CELL) {
       this.resultPath = null;
       return null;
     }
 
     this.resultPath = [];
 
-    let currentX = finishX;
-    let currentY = finishY;
+    let currentX = finishY;
+    let currentY = finishX;
 
     const addStep = (y, x) => {
       this.resultPath.push([y, x]);
     };
 
-    addStep(finishX, finishY);
+    addStep(finishY, finishX);
 
     const propagateWave = (newX, newY, step) => {
       if (this.stepsMatrix[newX] !== undefined) {
@@ -156,7 +156,7 @@ class WavePathfinder {
       return false;
     };
 
-    for (let step = this.stepsMatrix[finishX][finishY]; step >= 0; step--) {
+    for (let step = this.stepsMatrix[finishY][finishX]; step >= 0; step--) {
       if (
         propagateWave(currentX + 1, currentY, step) ||
         propagateWave(currentX - 1, currentY, step) ||
