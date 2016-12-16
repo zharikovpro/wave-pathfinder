@@ -129,29 +129,6 @@ describe('WavePathfinder', () => {
     });
   });
 
-  describe('findPath', () => {
-    const tests = [{
-      name: 'returns null when there is no path',
-      map: 'test/maps/impassable/wall-vertical.txt',
-    }, {
-      name: 'returns path from left to right',
-      map: 'test/maps/passable/top-left-to-bottom-right.txt',
-    }, {
-      name: 'returns path from right to left',
-      map: 'test/maps/passable/bottom-right-to-top-left.txt',
-    }];
-
-    tests.forEach((test) => {
-      it(test.name, () => {
-        const { matrix, steps, startY, startX, finishY, finishX } = loadMap(readMap(test.map));
-
-        const path = WavePathfinder.findPath(matrix, startY, startX, finishY, finishX);
-
-        assert.deepEqual(path, steps);
-      });
-    }); // forEach
-  }); // describe - findPath
-
   describe('backtracePath', () => {
     it('throws exception if expandWave was not called before', () => {
       (() => {
@@ -160,4 +137,21 @@ describe('WavePathfinder', () => {
       }).should.throw(Error);
     });
   });
+
+  describe('findPath', () => {
+    ['impassable', 'passable'].forEach(dir => {
+      describe(dir, () => {
+        fs.readdirSync(`test/maps/${dir}`).forEach(file => {
+          it(file.replace('.txt', ''), () => {
+            const map = readMap(`test/maps/${dir}/${file}`);
+            const { matrix, startY, startX, finishY, finishX, steps } = loadMap(map);
+
+            const path = WavePathfinder.findPath(matrix, startY, startX, finishY, finishX);
+
+            assert.deepEqual(path, steps);
+          });
+        });
+      });
+    });
+  }); // describe - findPath
 }); // describe - WavePathfinder
