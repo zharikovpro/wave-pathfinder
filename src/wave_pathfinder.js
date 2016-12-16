@@ -11,19 +11,19 @@ class WavePathfinder {
    * Shorthand method for findPath
    *
    * @param {array} obstaclesMatrix
-   * @param {number} startX
    * @param {number} startY
-   * @param {number} finishX
+   * @param {number} startX
    * @param {number} finishY
+   * @param {number} finishX
    *
    * @return {null|object[]} Path from start to finish or null if not found.
    *                         Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  static findPath(obstaclesMatrix, startX, startY, finishX, finishY) {
+  static findPath(obstaclesMatrix, startY, startX, finishY, finishX) {
     const finder = new this(obstaclesMatrix);
 
-    return finder.findPath(startX, startY, finishX, finishY);
+    return finder.findPath(startY, startX, finishY, finishX);
   }
 
   /**
@@ -53,19 +53,19 @@ class WavePathfinder {
   /**
    * Shorthand that combines expandWave + backtracePath.
    *
-   * @param {number} startX
    * @param {number} startY
-   * @param {number} finishX
+   * @param {number} startX
    * @param {number} finishY
+   * @param {number} finishX
    *
    * @return {null|array} Shortest path from start to finish or null if not found.
    *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  findPath(startX, startY, finishX, finishY) {
-    this.expandWave(startX, startY);
+  findPath(startY, startX, finishY, finishX) {
+    this.expandWave(startY, startX);
 
-    return this.backtracePath(finishX, finishY);
+    return this.backtracePath(finishY, finishX);
   }
 
   /**
@@ -73,37 +73,37 @@ class WavePathfinder {
    * This method must be called at least once to find shortest paths from start to other cells.
    * Once it has been called, backtracePath can be called multiple times for different finish cells.
    *
-   * @param {number} startX
    * @param {number} startY
+   * @param {number} startX
    *
    * @return {array} Steps array with minimum possible steps number for each cell.
    *                 0 means start (current) cell, -1 means unreachable cell.
    */
 
-  expandWave(startX, startY) {
+  expandWave(startY, startX) {
     this.resultPath = [];
 
     // first part of the wave algorithm - work field matrix initialization
     this.stepsMatrix = this.obstaclesMatrix.map(row => row.slice().fill(this.UNVISITED_CELL));
-    this.stepsMatrix[startX][startY] = this.START_CELL;
+    this.stepsMatrix[startY][startX] = this.START_CELL;
 
     // second part of the wave algorithm - wave propagation
-    const propagateWave = (newX, newY, step) => {
-      if (this.obstaclesMatrix[newX] && !this.obstaclesMatrix[newX][newY]) {
-        if (this.stepsMatrix[newX][newY] === this.UNVISITED_CELL) {
-          this.stepsMatrix[newX][newY] = step + 1;
+    const propagateWave = (newY, newX, step) => {
+      if (this.obstaclesMatrix[newY] && !this.obstaclesMatrix[newY][newX]) {
+        if (this.stepsMatrix[newY][newX] === this.UNVISITED_CELL) {
+          this.stepsMatrix[newY][newX] = step + 1;
         }
       }
     };
 
     for (let step = 0; step < this.stepsMatrix.length * this.stepsMatrix[0].length; step++) {
-      for (let x = 0; x < this.stepsMatrix.length; x++) {
-        for (let y = 0; y < this.stepsMatrix[0].length; y++) {
-          if (this.stepsMatrix[x][y] === step) {
-            propagateWave(x, y + 1, step); // up
-            propagateWave(x + 1, y, step); // right
-            propagateWave(x, y - 1, step); // down
-            propagateWave(x - 1, y, step); // left
+      for (let y = 0; y < this.stepsMatrix.length; y++) {
+        for (let x = 0; x < this.stepsMatrix[0].length; x++) {
+          if (this.stepsMatrix[y][x] === step) {
+            propagateWave(y + 1, x, step); // up
+            propagateWave(y, x + 1, step); // right
+            propagateWave(y - 1, x, step); // down
+            propagateWave(y, x - 1, step); // left
           }
         }
       }
@@ -116,52 +116,52 @@ class WavePathfinder {
    * Finds shortest path from start to finish based on steps matrix.
    * Call this method after expandWave.
    *
-   * @param {number} finishX
    * @param {number} finishY
+   * @param {number} finishX
    *
    * @return {null|array} Path from start to finish or null if not found.
    *                      Example: [ [0, 0], [1, 0], [2, 0] ]
    */
 
-  backtracePath(finishX, finishY) {
+  backtracePath(finishY, finishX) {
     if (typeof this.stepsMatrix === 'undefined') {
       throw new Error('Call expandWave first to calculate stepsMatrix!');
     }
 
-    if (this.stepsMatrix[finishX][finishY] === this.UNVISITED_CELL) {
+    if (this.stepsMatrix[finishY][finishX] === this.UNVISITED_CELL) {
       this.resultPath = null;
       return null;
     }
 
     this.resultPath = [];
 
-    let currentX = finishX;
     let currentY = finishY;
+    let currentX = finishX;
 
-    const addStep = (x, y) => {
+    const addStep = (y, x) => {
       this.resultPath.push([y, x]);
     };
 
-    addStep(finishX, finishY);
+    addStep(finishY, finishX);
 
-    const propagateWave = (newX, newY, step) => {
-      if (this.stepsMatrix[newX] !== undefined) {
-        if (this.stepsMatrix[newX][newY] === step - 1) {
-          addStep(newX, newY);
-          currentX = newX;
+    const propagateWave = (newY, newX, step) => {
+      if (this.stepsMatrix[newY] !== undefined) {
+        if (this.stepsMatrix[newY][newX] === step - 1) {
+          addStep(newY, newX);
           currentY = newY;
+          currentX = newX;
           if (step === 1) return true;
         }
       }
       return false;
     };
 
-    for (let step = this.stepsMatrix[finishX][finishY]; step >= 0; step--) {
+    for (let step = this.stepsMatrix[finishY][finishX]; step >= 0; step--) {
       if (
-        propagateWave(currentX + 1, currentY, step) ||
-        propagateWave(currentX - 1, currentY, step) ||
-        propagateWave(currentX, currentY + 1, step) ||
-        propagateWave(currentX, currentY - 1, step)
+        propagateWave(currentY + 1, currentX, step) ||
+        propagateWave(currentY - 1, currentX, step) ||
+        propagateWave(currentY, currentX + 1, step) ||
+        propagateWave(currentY, currentX - 1, step)
       ) {
         break;
       }
