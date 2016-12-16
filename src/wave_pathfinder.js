@@ -97,13 +97,13 @@ class WavePathfinder {
     };
 
     for (let step = 0; step < this.stepsMatrix.length * this.stepsMatrix[0].length; step++) {
-      for (let x = 0; x < this.stepsMatrix.length; x++) {
-        for (let y = 0; y < this.stepsMatrix[0].length; y++) {
-          if (this.stepsMatrix[x][y] === step) {
-            propagateWave(x, y + 1, step); // up
-            propagateWave(x + 1, y, step); // right
-            propagateWave(x, y - 1, step); // down
-            propagateWave(x - 1, y, step); // left
+      for (let y = 0; y < this.stepsMatrix.length; y++) {
+        for (let x = 0; x < this.stepsMatrix[0].length; x++) {
+          if (this.stepsMatrix[y][x] === step) {
+            propagateWave(y + 1, x, step); // up
+            propagateWave(y, x + 1, step); // right
+            propagateWave(y - 1, x, step); // down
+            propagateWave(y, x - 1, step); // left
           }
         }
       }
@@ -135,8 +135,8 @@ class WavePathfinder {
 
     this.resultPath = [];
 
-    let currentX = finishY;
-    let currentY = finishX;
+    let currentY = finishY;
+    let currentX = finishX;
 
     const addStep = (y, x) => {
       this.resultPath.push([y, x]);
@@ -148,8 +148,8 @@ class WavePathfinder {
       if (this.stepsMatrix[newY] !== undefined) {
         if (this.stepsMatrix[newY][newX] === step - 1) {
           addStep(newY, newX);
-          currentX = newY;
-          currentY = newX;
+          currentY = newY;
+          currentX = newX;
           if (step === 1) return true;
         }
       }
@@ -158,10 +158,10 @@ class WavePathfinder {
 
     for (let step = this.stepsMatrix[finishY][finishX]; step >= 0; step--) {
       if (
-        propagateWave(currentX + 1, currentY, step) ||
-        propagateWave(currentX - 1, currentY, step) ||
-        propagateWave(currentX, currentY + 1, step) ||
-        propagateWave(currentX, currentY - 1, step)
+        propagateWave(currentY + 1, currentX, step) ||
+        propagateWave(currentY - 1, currentX, step) ||
+        propagateWave(currentY, currentX + 1, step) ||
+        propagateWave(currentY, currentX - 1, step)
       ) {
         break;
       }
