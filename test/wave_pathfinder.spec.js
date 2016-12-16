@@ -111,66 +111,64 @@ describe('loadMap helper function', () => {
                                  [2, 4]]);
   });
 });
-//
-// describe('WavePathfinder', () => {
-//   describe('constructor', () => {
-//     it('throws exception when obstaclesMatrix argument is not an array', () => {
-//       (() => {
-//         new WavePathfinder('bla-bla-bla'); // eslint-disable-line no-new
-//       }).should.throw(Error);
-//     });
-//
-//     it('makes a copy of passed obstaclesMatrix argument', () => {
-//       const { matrix } = loadMap(readMap('test/maps/load/impassable.txt'));
-//
-//       const finder = new WavePathfinder(matrix);
-//
-//       assert.deepEqual(finder.obstaclesMatrix, [[false, false, true, false, false],
-//                                                 [false, false, true, false, false],
-//                                                 [false, false, true, false, false],
-//                                                 [false, false, true, false, false],
-//                                                 [false, false, true, false, false]]);
-//     });
-//   });
-//
-//   describe('findPath', () => {
-//     const tests = [{
-//       name: 'returns null when there is no path',
-//       map: `|A| |x| | |
-//             | | |x| | |
-//             | | |x| | |
-//             | | |x|B| |`,
-//     }, {
-//       name: 'returns path from left to right',
-//       map: `|A|1|2|3|4|
-//             |x|x|x|x|5|
-//             |x| | |x|6|
-//             | | | |x|B|`,
-//     }, {
-//       name: 'returns path from right to left',
-//       map: `|B|6|x| | |
-//             |x|5|4|x| |
-//             | |x|3|2|x|
-//             | | |x|1|A|`,
-//     }];
-//
-//     tests.forEach((test) => {
-//       it(test.name, () => {
-//         const { matrix, steps, startX, startY, finishX, finishY } = loadMap(test.map);
-//
-//         const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
-//
-//         assert.deepEqual(path, steps);
-//       });
-//     }); // forEach
-//   }); // describe - findPath
-//
-//   describe('backtracePath', () => {
-//     it('throws exception if expandWave was not called before', () => {
-//       (() => {
-//         const finder = new WavePathfinder([[0, 1], [1, 0]]);
-//         finder.backtracePath(1, 1);
-//       }).should.throw(Error);
-//     });
-//   });
-// }); // describe - WavePathfinder
+
+describe('WavePathfinder', () => {
+  describe('constructor', () => {
+    it('throws exception when obstaclesMatrix argument is not an array', () => {
+      (() => {
+        new WavePathfinder('bla-bla-bla'); // eslint-disable-line no-new
+      }).should.throw(Error);
+    });
+
+    it('makes a copy of passed obstaclesMatrix argument', () => {
+      const { matrix } = loadMap(readMap('test/maps/load/impassable.txt'));
+
+      const finder = new WavePathfinder(matrix);
+
+      assert.deepEqual(finder.obstaclesMatrix, [[false, false, true, false, false],
+                                                [false, false, true, false, false],
+                                                [false, false, true, false, false]]);
+    });
+  });
+
+  describe('findPath', () => {
+    const tests = [{
+      name: 'returns null when there is no path',
+      map: `|A| |x| | |
+            | | |x| | |
+            | | |x| | |
+            | | |x|B| |`,
+    }, {
+      name: 'returns path from left to right',
+      map: `|A|1|2|3|4|
+            |x|x|x|x|5|
+            |x| | |x|6|
+            | | | |x|B|`,
+    }, {
+      name: 'returns path from right to left',
+      map: `|B|6|x| | |
+            |x|5|4|x| |
+            | |x|3|2|x|
+            | | |x|1|A|`,
+    }];
+
+    tests.forEach((test) => {
+      it(test.name, () => {
+        const { matrix, steps, startX, startY, finishX, finishY } = loadMap(test.map);
+
+        const path = WavePathfinder.findPath(matrix, startX, startY, finishX, finishY);
+
+        assert.deepEqual(path, steps);
+      });
+    }); // forEach
+  }); // describe - findPath
+
+  describe('backtracePath', () => {
+    it('throws exception if expandWave was not called before', () => {
+      (() => {
+        const finder = new WavePathfinder([[0, 1], [1, 0]]);
+        finder.backtracePath(1, 1);
+      }).should.throw(Error);
+    });
+  });
+}); // describe - WavePathfinder
