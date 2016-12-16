@@ -42,7 +42,7 @@ const loadMap = (drawing) => {
   } else {
     steps.push({ y: startY, x: startX, step: 0 });
     steps.push({ y: finishY, x: finishX, step: steps.length });
-    steps = steps.sort((a, b) => a.step - b.step).map(step => ([step.x, step.y]));
+    steps = steps.sort((a, b) => a.step - b.step).map(step => ([step.y, step.x]));
   }
 
   return { matrix, startY, startX, finishY, finishX, steps };
@@ -69,10 +69,11 @@ describe('loadMap helper function', () => {
     assert.isNull(map.startX);
     assert.isNull(map.finishY);
     assert.isNull(map.finishX);
+    assert.isNull(map.steps);
+
     assert.deepEqual(map.matrix, [[true, true, true, true, true],
                                   [true, true, true, true, true],
                                   [true, true, true, true, true]]);
-    assert.isNull(map.steps);
   });
 
   it('loads impassable map', () => {
@@ -82,10 +83,11 @@ describe('loadMap helper function', () => {
     assert.equal(map.startX, 0);
     assert.equal(map.finishY, 2);
     assert.equal(map.finishX, 4);
+    assert.isNull(map.steps);
+
     assert.deepEqual(map.matrix, [[false, false, true, false, false],
                                   [false, false, true, false, false],
                                   [false, false, true, false, false]]);
-    assert.isNull(map.steps);
   });
 
   it('loads passable map', () => {
@@ -95,6 +97,7 @@ describe('loadMap helper function', () => {
     assert.equal(map.startX, 0);
     assert.equal(map.finishY, 2);
     assert.equal(map.finishX, 4);
+
     assert.deepEqual(map.matrix, [[false, false, false, false, false],
                                   [false, false, false, false, false],
                                   [false, false, false, false, false]]);
